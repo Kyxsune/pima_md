@@ -43,7 +43,7 @@ class PimaReport:
         self.methods[self.plasmid_methods_title] = pd.Series(dtype='float64')
 
     def start_doc(self): #Converted
-        self.doc = MdUtils(file_name="report.md",title='Report')
+        self.doc = MdUtils(file_name=self.analysis.report_md,title='Report')
 
     def add_header(self): #Converted
 
@@ -55,6 +55,8 @@ class PimaReport:
         self.doc.new_header(2,'Run Information')
         # Tables in md.utils are implemented as a wrapping function. Weird but ok.
         Table_list = [
+            "Category",
+            "Information",
             "Date",
             self.analysis.start_time,
             "ONT FAST5",
@@ -68,14 +70,16 @@ class PimaReport:
             "Reference",
             self.analysis.reference_fasta
         ]
-        self.doc.new_table(columns=2,rows=6,text=Table_list,text_align='left')
+        self.doc.new_table(columns=2,rows=7,text=Table_list,text_align='left')
 
     def add_ont_library_information(self): #Converted
 
         if self.analysis.ont_n50 is None:
             return
-        self.doc.addHeader(2, 'ONT library statistics')
+        self.doc.new_header(2, 'ONT library statistics')
         Table_List = [
+            "Category",
+            "Quantity",
             "ONT N50",
             '{:,}'.format(self.analysis.ont_n50),
             "ONT reads",
@@ -89,7 +93,7 @@ class PimaReport:
             "Reference",
             self.analysis.reference_fasta
         ]
-        self.doc.new_table(columns=2, rows=6, text=Table_List, text_align='left')
+        self.doc.new_table(columns=2, rows=7, text=Table_List, text_align='left')
 
     def add_illumina_library_information(self): #Converted
         if self.analysis.illumina_length_mean is None:
@@ -97,6 +101,8 @@ class PimaReport:
 
         self.doc.new_header(2, 'Illumina library statistics')
         Table_List = [
+            "Illumina Info.",
+            "Quantity",
             'Illumina mean length',
             '{:.1f}'.format(self.analysis.illumina_length_mean),
             'Illumina reads',
@@ -104,7 +110,7 @@ class PimaReport:
             'Illumina bases',
             '{:s}'.format(self.analysis.illumina_bases)
         ]
-        self.doc.new_table(columns=2, rows=3, text=Table_List, text_align='left')
+        self.doc.new_table(columns=2, rows=4, text=Table_List, text_align='left')
 
     def add_assembly_information(self): #Converted
         if self.analysis.genome is None:
@@ -115,12 +121,14 @@ class PimaReport:
         genome_size = si_format(sum([len(x) for x in self.analysis.genome]), # This sums up the lengths of teh genomes
                                 precision=1)
         Table_List = [
+            "Category",
+            "Information",
             "Contigs",
-            self.analysis.genome,
+            str(len(self.analysis.genome)),
             "Assembly size",
             genome_size
         ]
-        self.doc.new_table(columns=2, rows=2, text=Table_List, text_align='left')
+        self.doc.new_table(columns=2, rows=3, text=Table_List, text_align='left')
 
     def add_contig_info(self): #Converted
 
@@ -141,7 +149,7 @@ class PimaReport:
             formatted.iloc[:, 1] = formatted.iloc[:, 1].apply(lambda x: '{:,}'.format(x))# Weird way to format a series but ok
             for i in range(self.analysis.contig_info[method].shape[0]):
                 Table_List = Table_List + formatted.iloc[i, :].values.tolist()
-            row_count = len(Table_List)/3
+            row_count = int(len(Table_List)/3)
             self.doc.new_table(columns=3, rows=row_count, text=Table_List, text_align='left')
 
     def add_assembly_notes(self): # Converted
@@ -174,7 +182,7 @@ class PimaReport:
             for index, row in kraken_fracs.iterrows():
                 Table_List = Table_List + row.tolist()
 
-            row_count = len(Table_List)/4
+            row_count = int(len(Table_List)/4)
 
             self.doc.new_table(columns=4, rows=row_count, text=Table_List, text_align='left')
 
@@ -196,13 +204,15 @@ class PimaReport:
         self.doc.new_header(level=3, title=self.snp_indel_title)
 
         Table_1 = [
+            "Category",
+            "Quantity",
             'SNPs',
             '{:,}'.format(self.analysis.quast_mismatches),
             'Small indels',
             '{:,}'.format(self.analysis.quast_indels)
         ]
 
-        self.doc.new_table(columns=3, rows=2, text=Table_1, text_align='left')
+        self.doc.new_table(columns=2, rows=3, text=Table_1, text_align='left')
         if len(self.analysis.alignment_notes) > 0:
             self.doc.new_header(level=3, title=self.alignment_notes_title)
             for note in self.analysis.alignment_notes:
@@ -210,12 +220,12 @@ class PimaReport:
 
         for contig in alignments.index.tolist():
             contig_title = 'Alignment to ' + contig
-            image_png = os.path.basename(alignments[contig])
+            image_png = alignments[contig]
             self.doc.new_header(level=3,title=contig_title)
             self.doc.new_line(
                 self.doc.new_inline_image(
                     text='contig_title',
-                    path=image_png
+                    path=os.path.abspath(image_png)
                 )
             )
         method = 'The genome assembly was aligned against the reference sequencing using dnadiff (v ' \
@@ -244,9 +254,11 @@ class PimaReport:
             self.doc.new_header(level=3,title=feature_name)
             if (features.shape[0] == 0):
                 continue
+
             for contig in pd.unique(features.iloc[:, 0]):
 
-                self.doc.new_paragraph(contig)
+                self.doc.new_line(contig)
+
                 contig_features = features.loc[(features.iloc[:, 0] == contig), :]
 
                 Table_List = [
@@ -258,9 +270,9 @@ class PimaReport:
                     feature[4] = '{:.3f}'.format(feature[4])
                     Table_List = Table_List + feature[1:].values.tolist()
 
-                row_count = len(Table_List) / 5
-
-                self.doc.new_table(columns=2, rows=row_count, text=Table_List, text_align='left')
+                row_count = int(len(Table_List) / 5)
+                self.doc.new_line()
+                self.doc.new_table(columns=5, rows=row_count, text=Table_List, text_align='left')
 
         method = 'The genome assembly was queried for features using blastn (v ' + self.analysis.versions[
             'blastn'] + ').  ' + \
@@ -277,11 +289,11 @@ class PimaReport:
         self.doc.new_paragraph('Only contigs with features are shown')
 
         for contig in self.analysis.feature_plots.index.tolist():
-            image_png = os.path.basename(self.analysis.feature_plots[contig])
+            image_png = self.analysis.feature_plots[contig]
             self.doc.new_line(
                 self.doc.new_inline_image(
                     text='Analysis',
-                    path=image_png
+                    path=os.path.abspath(image_png)
                 )
             )
 
@@ -309,6 +321,8 @@ class PimaReport:
             ]
             for i in range(region_mutations.shape[0]):
                 Table_List = Table_List + region_mutations.iloc[i, [0, 1, 3, 4, 5, 6]].values.tolist()
+            row_count = int(len(Table_List)/6)
+            self.doc.new_table(columns=6, rows=row_count, text=Table_List, text_align='left')
 
         method = self.analysis.mutations_read_type + ' reads were mapped to the reference sequence using minimap2 (v ' \
                  + self.analysis.versions['minimap2'] + ').'
@@ -367,6 +381,9 @@ class PimaReport:
             for i in range(genome_indels.shape[0]):
                 Table_List = Table_List + genome_indels.iloc[i, :].values.tolist()
 
+            row_count= int(len(Table_List)/4)
+            self.doc.new_table(columns=4, rows=row_count, text=Table_List, text_align='left')
+
         method = 'Large insertions or deletions were found as the complement of aligned ' + \
                  'regions using bedtools (v ' + self.analysis.versions['bedtools'] + ').'
         self.methods[self.reference_methods_title] = self.methods[self.reference_methods_title].append(
@@ -407,9 +424,9 @@ class PimaReport:
         for i in range(plasmids.shape[0]):
             Table_List = Table_List + plasmids.iloc[i, 0:6].values.tolist()
 
-        row_count = len(Table_List) / 6
+        row_count = int(len(Table_List) / 6)
 
-        self.doc.new_table(columns=3, rows=row_count, text=Table_List, text_align='left')
+        self.doc.new_table(columns=6, rows=row_count, text=Table_List, text_align='left')
 
         method = ' '.join(['The plasmid reference database was queried against the genome assembly using minimap2 (v',
                            self.analysis.versions['minimap2'], ').'])
@@ -466,7 +483,7 @@ class PimaReport:
                 pd.Series(method))
 
     def make_tex(self): #Converted
-
+        #self.doc.new_table_of_contents(table_title='Table Of Contents', depth=2)
         self.doc.create_md_file()
 
     def make_report(self): # No need to Convert
