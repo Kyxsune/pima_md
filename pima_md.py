@@ -3312,11 +3312,11 @@ class Analysis :
         self.validate_file_and_size_or_error(self.report_md, 'Report MD', 'cannot be found', 'is empty')
         
         tectonic_stdout, tectonic_stderr = self.std_files(os.path.join(self.report_dir, 'markdown2pdf'))
-        command = ' '.join(['gh-md-to-html',
+        command = ' '.join(['pandoc -f gfm',
                             self.report_md,
-                            '-p',
+                            '-o',
                             self.report_pdf,
-                            '--core-converter OFFLINE+ -s False',
+                            '--pdf-engine=wkhtmltopdf',
                            '1>' + tectonic_stdout, '2>' + tectonic_stderr])
         self.print_and_run(command)
         self.validate_file_and_size_or_error(self.report_pdf, 'Report PDF', 'cannot be found', 'is empty')

@@ -47,8 +47,9 @@ class PimaReport:
 
     def add_header(self): #Converted
 
+        self.doc.new_line('<div style="page-break-after: always;"></div>')
+        self.doc.new_line()
         header_text = 'Analysis of ' + self.analysis.analysis_name
-
         self.doc.new_header(1,header_text)
 
     def add_run_information(self): #Converted
@@ -94,6 +95,8 @@ class PimaReport:
             self.analysis.reference_fasta
         ]
         self.doc.new_table(columns=2, rows=7, text=Table_List, text_align='left')
+        self.doc.new_line('<div style="page-break-after: always;"></div>')
+        self.doc.new_line()
 
     def add_illumina_library_information(self): #Converted
         if self.analysis.illumina_length_mean is None:
@@ -129,6 +132,7 @@ class PimaReport:
             genome_size
         ]
         self.doc.new_table(columns=2, rows=3, text=Table_List, text_align='left')
+
 
     def add_contig_info(self): #Converted
 
@@ -213,6 +217,10 @@ class PimaReport:
         ]
 
         self.doc.new_table(columns=2, rows=3, text=Table_1, text_align='left')
+
+        self.doc.new_line('<div style="page-break-after: always;"></div>')
+        self.doc.new_line()
+
         if len(self.analysis.alignment_notes) > 0:
             self.doc.new_header(level=3, title=self.alignment_notes_title)
             for note in self.analysis.alignment_notes:
@@ -228,6 +236,9 @@ class PimaReport:
                     path=os.path.abspath(image_png)
                 )
             )
+            self.doc.new_line('<div style="page-break-after: always;"></div>')
+            self.doc.new_line()
+
         method = 'The genome assembly was aligned against the reference sequencing using dnadiff (v ' \
                  + self.analysis.versions['dnadiff'] + ').'
         self.methods[self.reference_methods_title] = self.methods[self.reference_methods_title].append(
@@ -440,6 +451,9 @@ class PimaReport:
 
     def add_methods(self): #Converted
 
+        self.doc.new_line('<div style="page-break-after: always;"></div>')
+        self.doc.new_line()
+
         if len(self.methods) == 0:
             return
 
@@ -457,6 +471,7 @@ class PimaReport:
         self.doc.new_header(level=2, title=self.summary_title)
         # First section of Summary
         self.doc.new_header(level=3, title='CDC Advisory')
+        self.doc.new_paragraph(cdc_advisory)
         self.add_run_information()
         self.add_ont_library_information()
         methods = []
@@ -483,7 +498,7 @@ class PimaReport:
                 pd.Series(method))
 
     def make_tex(self): #Converted
-        #self.doc.new_table_of_contents(table_title='Table Of Contents', depth=2)
+        self.doc.new_table_of_contents(table_title='Table Of Contents', depth=2)
         self.doc.create_md_file()
 
     def make_report(self): # No need to Convert

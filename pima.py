@@ -1313,6 +1313,7 @@ class Analysis :
                 # Make sure that the positions in the BED file fall within the chromosomes provided in the reference sequence
                 for mutation_region in range(self.mutation_regions.shape[0]) :
                     mutation_region = self.mutation_regions.iloc[mutation_region, :]
+                    print(mutation_region[0])
                     if not (mutation_region[0] in self.reference) :
                         self.errors += [' '.join(['Mutation region',
                                                   ' '.join(mutation_region.astype(str)),
