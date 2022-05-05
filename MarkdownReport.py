@@ -4,7 +4,7 @@ from si_prefix import si_format
 
 import os
 
-cdc_advisory = 'The analysis and report presented here should be treated as preliminary.  Please contact the CDC/BDRD with any results regarding Bacillus anthracis.'
+cdc_advisory = 'The analysis and report presented here should be treated as preliminary.  Please contact the CDC/BDRD with any results regarding _Bacillus anthracis_.'
 
 class PimaReport:
 
