@@ -3316,7 +3316,7 @@ class Analysis :
                             self.report_md,
                             '-o',
                             self.report_pdf,
-                            '--pdf-engine=wkhtmltopdf',
+                            '--pdf-engine=wkhtmltopdf -V margin-top=10 -V margin-left=3 -V margin-right=3 -V margin-bottom=3 -V papersize=legal',
                            '1>' + tectonic_stdout, '2>' + tectonic_stderr])
         self.print_and_run(command)
         self.validate_file_and_size_or_error(self.report_pdf, 'Report PDF', 'cannot be found', 'is empty')

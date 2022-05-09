@@ -138,21 +138,21 @@ class PimaReport:
 
     def wordwrap_markdown(self,string):
         if string:
-            if len(string) < 50:
+            if len(string) < 35:
                 return(string)
             else:
                 if '/' in string:
                     adjust = string.split('/')
                     out = ''
-                    max = 50
+                    max = 35
                     for i in adjust:
                         out = out + '/' + i
                         if len(out) > max:
                             out += '<br>'
-                            max += 50
+                            max += 35
                     return(out)
                 else:
-                    out = [string[i:i + 50] for i in range(0, len(string), 50)]
+                    out = [string[i:i + 35] for i in range(0, len(string), 50)]
                     return('<br>'.join(out))
         else:
             return(string)
