@@ -61,17 +61,20 @@ class PimaReport:
             "Date",
             self.analysis.start_time,
             "ONT FAST5",
-            self.analysis.ont_fast5,
+            self.wordwrap_markdown(self.analysis.ont_fast5),
             "ONT FASTQ",
-            self.analysis.ont_raw_fastq,
+            self.wordwrap_markdown(self.analysis.ont_raw_fastq),
             "Illumina FASTQ",
-            self.analysis.illumina_fastq,
+            self.wordwrap_markdown(self.analysis.illumina_fastq),
             "Assembly",
-            self.analysis.genome_fasta,
+            self.wordwrap_markdown(self.analysis.genome_fasta),
             "Reference",
-            self.analysis.reference_fasta
+            self.wordwrap_markdown(self.analysis.reference_fasta),
         ]
         self.doc.new_table(columns=2,rows=7,text=Table_list,text_align='left')
+        self.doc.new_line()
+        self.doc.new_line('<div style="page-break-after: always;"></div>')
+        self.doc.new_line()
 
     def add_ont_library_information(self): #Converted
 
@@ -88,11 +91,11 @@ class PimaReport:
             "ONT bases",
             '{:s}'.format(self.analysis.ont_bases),
             "Illumina FASTQ",
-            self.analysis.illumina_fastq,
+            self.wordwrap_markdown(self.analysis.illumina_fastq),
             "Assembly",
-            self.analysis.genome_fasta,
+            self.wordwrap_markdown(self.analysis.genome_fasta),
             "Reference",
-            self.analysis.reference_fasta
+            self.wordwrap_markdown(self.analysis.reference_fasta),
         ]
         self.doc.new_table(columns=2, rows=7, text=Table_List, text_align='left')
         self.doc.new_line('<div style="page-break-after: always;"></div>')
@@ -133,6 +136,26 @@ class PimaReport:
         ]
         self.doc.new_table(columns=2, rows=3, text=Table_List, text_align='left')
 
+    def wordwrap_markdown(self,string):
+        if string:
+            if len(string) < 50:
+                return(string)
+            else:
+                if '/' in string:
+                    adjust = string.split('/')
+                    out = ''
+                    max = 50
+                    for i in adjust:
+                        out = out + '/' + i
+                        if len(out) > max:
+                            out += '<br>'
+                            max += 50
+                    return(out)
+                else:
+                    out = [string[i:i + 50] for i in range(0, len(string), 50)]
+                    return('<br>'.join(out))
+        else:
+            return(string)
 
     def add_contig_info(self): #Converted
 
@@ -161,6 +184,8 @@ class PimaReport:
         if len(self.analysis.assembly_notes) == 0:
             return
 
+        self.doc.new_line()
+        self.doc.new_line('<div style="page-break-after: always;"></div>')
         self.doc.new_header(2, self.assembly_notes_title)
 
         for note in self.analysis.assembly_notes:
@@ -384,8 +409,6 @@ class PimaReport:
             genome_indels.iloc[:, 2] = genome_indels.iloc[:, 2].apply(lambda x: '{:,}'.format(x))
             genome_indels.iloc[:, 3] = genome_indels.iloc[:, 3].apply(lambda x: '{:,}'.format(x))
 
-            self.doc.new_header(level=3, title=genome)
-
             Table_List = [
                 'Reference contig', 'Start', 'Stop', 'Size (bp)'
             ]
@@ -399,6 +422,10 @@ class PimaReport:
                  'regions using bedtools (v ' + self.analysis.versions['bedtools'] + ').'
         self.methods[self.reference_methods_title] = self.methods[self.reference_methods_title].append(
             pd.Series(method))
+
+        self.doc.new_line()
+        self.doc.new_line('<div style="page-break-after: always;"></div>')
+        self.doc.new_line()
 
     def add_plasmids(self): #Converted
 
