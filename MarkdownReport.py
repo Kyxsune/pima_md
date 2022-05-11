@@ -1,5 +1,6 @@
 import pandas as pd
 from mdutils.mdutils import MdUtils
+from mdutils.tools import TableOfContents
 from si_prefix import si_format
 
 import os
@@ -43,17 +44,16 @@ class PimaReport:
         self.methods[self.plasmid_methods_title] = pd.Series(dtype='float64')
 
     def start_doc(self): #Converted
-        self.doc = MdUtils(file_name=self.analysis.report_md,title='Report')
-
-    def add_header(self): #Converted
-
-        self.doc.new_line('<div style="page-break-after: always;"></div>')
-        self.doc.new_line()
         header_text = 'Analysis of ' + self.analysis.analysis_name
-        self.doc.new_header(1,header_text)
+        self.doc = MdUtils(file_name=self.analysis.report_md,title=header_text)
+
+    def add_tableOfContents(self):
+        self.doc.create_marker(text_marker="TableOfContents")
+        self.doc.new_line()
+        self.doc.new_line('<div style="page-break-after: always;"></div>')
 
     def add_run_information(self): #Converted
-        self.doc.new_header(2,'Run Information')
+        self.doc.new_header(1,'Run Information')
         # Tables in md.utils are implemented as a wrapping function. Weird but ok.
         Table_list = [
             "Category",
@@ -73,7 +73,7 @@ class PimaReport:
         ]
         self.doc.new_table(columns=2,rows=7,text=Table_list,text_align='left')
         self.doc.new_line()
-        self.doc.new_line('<div style="page-break-after: always;"></div>')
+        self.add_tableOfContents()
         self.doc.new_line()
 
     def add_ont_library_information(self): #Converted
@@ -98,7 +98,6 @@ class PimaReport:
             self.wordwrap_markdown(self.analysis.reference_fasta),
         ]
         self.doc.new_table(columns=2, rows=7, text=Table_List, text_align='left')
-        self.doc.new_line('<div style="page-break-after: always;"></div>')
         self.doc.new_line()
 
     def add_illumina_library_information(self): #Converted
@@ -493,11 +492,10 @@ class PimaReport:
             self.doc.new_paragraph(' '.join(self.methods[methods_section]))
 
     def add_summary(self): #Converted
-
         # Add summary title
-        self.doc.new_header(level=2, title=self.summary_title)
+        # self.doc.new_header(level=1, title=self.summary_title)
         # First section of Summary
-        self.doc.new_header(level=3, title='CDC Advisory')
+        self.doc.new_header(level=1, title='CDC Advisory')
         self.doc.new_paragraph(cdc_advisory)
         self.add_run_information()
         self.add_ont_library_information()
@@ -508,7 +506,6 @@ class PimaReport:
             methods += [
                 'ONT reads were demultiplexed and trimmed using qcat (v ' + self.analysis.versions['qcat'] + ').']
         self.methods[self.basecalling_methods_title] = pd.Series(methods)
-
         self.add_illumina_library_information()
         self.add_assembly_information()
         self.add_contig_info()
@@ -525,13 +522,16 @@ class PimaReport:
                 pd.Series(method))
 
     def make_tex(self): #Converted
-        self.doc.new_table_of_contents(table_title='Table Of Contents', depth=2)
+        self.doc.new_table_of_contents(table_title='Detailed Run Information', depth=2,marker="TableOfContents")
+        text = self.doc.file_data_text
+        text = text.replace("##--[","")
+        text = text.replace("]--##","")
+        self.doc.file_data_text = text
         self.doc.create_md_file()
 
     def make_report(self): # No need to Convert
 
         self.start_doc()
-        self.add_header()
         self.add_summary()
         self.add_contamination()
         self.add_alignment()
