@@ -239,7 +239,7 @@ McLaughlin HP, Bugrysheva JV, Conley AB, Gulvik CA, Kolton CB, Marston C, Swaney
 
 ## FAQ
 
-### "(wkhtmltopdf:<>): Gtk-WARNING **: <>: cannot open display: " Error.
+### Error: "(wkhtmltopdf:<>): Gtk-WARNING **: <>: cannot open display: ".
 
 This error occurs in executing pima in a headless environment with no display environment for wkhtmltopdf to operate in. To solve it, install [xvfb](https://www.x.org/archive/X11R7.6/doc/man/man1/Xvfb.1.xhtml) and then use xvfb-run to execute pima.
 
