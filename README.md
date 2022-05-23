@@ -36,12 +36,13 @@ Developers and maintainers, Testers: [Andrew Conley](https://github.com/abconley
 
 * PiMA pipeline requires Python 3.6 or higher version. 
 * PiMA relies on GPU acceleration and parallezation for parts of its pipeline. Therefore a graphics card with a CUDA Compute Capability of >=6.0. [Handy Reference linking GPUs to Compatibility](https://developer.nvidia.com/cuda-gpus#compute)
+* Pilon version 1.24
 
 # Installation
 ## Method 1. (Preferred) Install using docker
-A docker image of this pipeline prebuilt with the dependencies is available at https://github.com/appliedbinf/pima-docker with steps detailing the installation and running the pipeline. This is the easiest way to load and run the pipeline.  
+A docker image of this pipeline, prebuilt with the dependencies, is available at https://github.com/appliedbinf/pima-docker with steps detailing the installation and running the pipeline. This is the easiest way to load and run the pipeline.  
   
-All the configuration has been performed here for the user and it is a lot easier to setup then installing each dependency.
+All the configurations have been performed here for the user and is a lot easier to setup than installing each dependency.
   
 ## Method 2. Using conda yml script
 PiMA pipeline can also be installed using conda environment. We have observed that conda doesn't always faithfully install the dependencies due to version conflicts of dependencies.  Please pay attention to any dependency that may be failing during the process.
@@ -52,7 +53,7 @@ conda env create -f pima.yml
 
 ```
 ## Method 3. Creating conda environment and loading the dependencies
-If you want to setup your conda environment yourself and install all the dependencies, here is how you can do that:
+If you want to setup conda environment yourself and install all the dependencies, here are the steps:
 
 ```
 # You can also install the dependencies while creating the PiMA base environment.
@@ -96,6 +97,15 @@ pima.py --out ont_output --ont-fast5 barcodes_folder --threads 16 --overwrite --
 --verb 3 --reference-genome ref.fasta --mutation-regions mutation_regions.bed
 
 ```
+Please make sure that the first column in the mutation_regions.bed file (#contig) is the same as the header in the fasta file. 
+Example: if the mutation_regions.bed file has 'chromosome' in the first column, then the contig header must include 'chromosome'.
+
+```
+> chromosome NC.03921
+or
+> NC.053521 chromosome
+```
+
 I prefer to run PiMA using the verbose flag and my hardware can support upto 20 threads. 
 Feel free to turn off the verbose flag if you so desire, and change the number of threads in accordance with your hardware 
 capability. This command will create the following outputs listed in no particular order:
@@ -258,3 +268,5 @@ PIMA utilizes the following programs internally:
 * SAMtools: http://htslib.org/
 * SPAdes: http://cab.spbu.ru/software/spades/ [Citation](https://www.ncbi.nlm.nih.gov/pubmed/22506599)
 * wtdbg2: https://github.com/ruanjue/wtdbg2 [Citation](https://www.nature.com/articles/s41592-019-0669-3)
+
+<Test Edit>
