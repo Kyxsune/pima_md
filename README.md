@@ -246,7 +246,13 @@ Other options:
 ## Literature Citations
 If you are using PIMA, please cite the following literature:
 McLaughlin HP, Bugrysheva JV, Conley AB, Gulvik CA, Kolton CB, Marston C, Swaney E, Lonsway DR, Cherney B, Gargis AS, Kongphet-Tran T, Lascols C, Michel P, Villanueva J, Hoffmaster ER, Gee JE, Sue D. 2020. When minutes matter: rapid nanopore whole genome sequencing for anthrax emergency preparedness. Emerging Infectious Diseases  
-  
+
+## FAQ
+
+### Error: "(wkhtmltopdf:<>): Gtk-WARNING **: <>: cannot open display: ".
+
+This error occurs in executing pima in a headless environment with no display environment for wkhtmltopdf to operate in. To solve it, install [xvfb](https://www.x.org/archive/X11R7.6/doc/man/man1/Xvfb.1.xhtml) and then use xvfb-run to execute pima.
+
 ## Software Dependencies
 PIMA utilizes the following programs internally:
 * BCFtools & Samtools: http://www.htslib.org/ [Citation](https://www.ncbi.nlm.nih.gov/pubmed/19505943)
