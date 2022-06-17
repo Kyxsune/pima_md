@@ -51,8 +51,10 @@ class PimaReport:
         self.doc.create_marker(text_marker="TableOfContents")
         self.doc.new_line()
         self.doc.new_line('<div style="page-break-after: always;"></div>')
+        self.doc.new_line()
 
     def add_run_information(self): #Converted
+        self.doc.new_line()
         self.doc.new_header(1,'Run Information')
         # Tables in md.utils are implemented as a wrapping function. Weird but ok.
         Table_list = [
@@ -80,6 +82,7 @@ class PimaReport:
 
         if self.analysis.ont_n50 is None:
             return
+        self.doc.new_line()
         self.doc.new_header(2, 'ONT library statistics')
         Table_List = [
             "Category",
@@ -104,6 +107,7 @@ class PimaReport:
         if self.analysis.illumina_length_mean is None:
             return
 
+        self.doc.new_line()
         self.doc.new_header(2, 'Illumina library statistics')
         Table_List = [
             "Illumina Info.",
@@ -121,6 +125,7 @@ class PimaReport:
         if self.analysis.genome is None:
             return
 
+        self.doc.new_line()
         self.doc.new_header(2, 'Assembly statistics')
 
         genome_size = si_format(sum([len(x) for x in self.analysis.genome]), # This sums up the lengths of teh genomes
@@ -165,6 +170,7 @@ class PimaReport:
 
             if not method in self.analysis.contig_info.index:
                 continue
+            self.doc.new_line()
             self.doc.new_header(2, 'Assembly coverage by ' + method)
             Table_List = [
                 "Contig",
@@ -185,6 +191,7 @@ class PimaReport:
 
         self.doc.new_line()
         self.doc.new_line('<div style="page-break-after: always;"></div>')
+        self.doc.new_line()
         self.doc.new_header(2, self.assembly_notes_title)
 
         for note in self.analysis.assembly_notes:
@@ -194,7 +201,7 @@ class PimaReport:
 
         if len(self.analysis.kraken_fracs) == 0:
             return
-
+        self.doc.new_line()
         self.doc.new_header(2,'Contamination check')
         for read_type, kraken_fracs in self.analysis.kraken_fracs.iteritems():
 
@@ -227,8 +234,9 @@ class PimaReport:
             alignments = self.analysis.contig_alignment
         else:
             return
-
+        self.doc.new_line()
         self.doc.new_header(level=2, title=self.alignment_title)
+        self.doc.new_line()
         self.doc.new_header(level=3, title=self.snp_indel_title)
 
         Table_1 = [
@@ -253,6 +261,7 @@ class PimaReport:
         for contig in alignments.index.tolist():
             contig_title = 'Alignment to ' + contig
             image_png = alignments[contig]
+            self.doc.new_line()
             self.doc.new_header(level=3,title=contig_title)
             self.doc.new_line(
                 self.doc.new_inline_image(
@@ -275,6 +284,7 @@ class PimaReport:
         if len(self.analysis.feature_hits) == 0:
             return
 
+        self.doc.new_line()
         self.doc.new_header(level=2,title=self.feature_title)
 
         for feature_name in self.analysis.feature_hits.index.tolist():
@@ -286,6 +296,7 @@ class PimaReport:
             features.iloc[:, 1] = features.iloc[:, 1].apply(lambda x: '{:,}'.format(x))
             features.iloc[:, 2] = features.iloc[:, 2].apply(lambda x: '{:,}'.format(x))
 
+            self.doc.new_line()
             self.doc.new_header(level=3,title=feature_name)
             if (features.shape[0] == 0):
                 continue
@@ -320,6 +331,7 @@ class PimaReport:
         if len(self.analysis.feature_plots) == 0:
             return
 
+        self.doc.new_line()
         self.doc.new_header(level=2,title='Feature Plots')
         self.doc.new_paragraph('Only contigs with features are shown')
 
@@ -340,10 +352,12 @@ class PimaReport:
 
         mutations = self.analysis.amr_mutations
 
+        self.doc.new_line()
         self.doc.new_header(level=2,title=self.mutation_title)
         for region_name in mutations.index.tolist():
 
             region_mutations = mutations[region_name].copy()
+            self.doc.new_line()
 
             self.doc.new_header(level=3,title=region_name)
             if (region_mutations.shape[0] == 0):
@@ -375,7 +389,7 @@ class PimaReport:
             return
 
         amr_matrix_png = self.analysis.amr_matrix_png
-
+        self.doc.new_line()
         self.doc.new_header(level=2,title=self.amr_matrix_title)
         self.doc.new_line('AMR genes and mutations with their corresponding drugs.')
         self.doc.new_line(
@@ -393,12 +407,13 @@ class PimaReport:
 
         large_indels = self.analysis.large_indels
 
+        self.doc.new_line()
         self.doc.new_header(level=2,title=self.large_indel_title)
 
         for genome in ['Reference insertions', 'Query insertions']:
 
             genome_indels = large_indels[genome].copy()
-
+            self.doc.new_line()
             self.doc.new_header(level=3,title=genome)
 
             if (genome_indels.shape[0] == 0):
@@ -439,6 +454,7 @@ class PimaReport:
 
         plasmids = plasmids.copy()
 
+        self.doc.new_line()
         self.doc.new_header(level=2,text=self.analysis.plasmid_title)
 
         if (plasmids.shape[0] == 0):
@@ -483,11 +499,14 @@ class PimaReport:
         if len(self.methods) == 0:
             return
 
+        self.doc.new_line()
         self.doc.new_header(level=2, title=self.methods_title)
+
 
         for methods_section in self.methods.index.tolist():
             if len(self.methods[methods_section]) == 0:
                 continue
+            self.doc.new_line()
             self.doc.new_header(level=3,title=methods_section)
             self.doc.new_paragraph(' '.join(self.methods[methods_section]))
 
@@ -497,6 +516,7 @@ class PimaReport:
         # First section of Summary
         self.doc.new_header(level=1, title='CDC Advisory')
         self.doc.new_paragraph(cdc_advisory)
+        self.doc.new_line()
         self.add_run_information()
         self.add_ont_library_information()
         methods = []
