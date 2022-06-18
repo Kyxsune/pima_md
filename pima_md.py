@@ -47,6 +47,7 @@ included_databases = [amr_database_default, inc_database_default]
 plasmid_database_default_fasta = os.path.join(pima_path, 'data/plasmids_and_vectors.fasta')
 kraken_database_default = os.path.join(pima_path, 'data/kraken2')
 reference_dir_default = os.path.join(pima_path, 'data/reference_sequences')
+pima_css = os.path.join(pima_path,'data/pima.css')
 
 
 class Colors:
@@ -3316,7 +3317,8 @@ class Analysis :
                             self.report_md,
                             '-o',
                             self.report_pdf,
-                            '--pdf-engine=weasyprint --css pima.css',
+                            '--pdf-engine=weasyprint',
+                            '--css ' + pima_css,
                            '1>' + tectonic_stdout, '2>' + tectonic_stderr])
         self.print_and_run(command)
         self.validate_file_and_size_or_error(self.report_pdf, 'Report PDF', 'cannot be found', 'is empty')
