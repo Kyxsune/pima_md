@@ -28,12 +28,12 @@ import matplotlib as mpl
 mpl.use('Agg')
 import matplotlib.pyplot as plt
 
-#from MarkdownReport import PimaReport
-from ba_report import PimaReport
+from MarkdownReport import PimaReport
+#from ba_report import PimaReport
 
 pd.set_option('display.max_colwidth', 200)
 
-VERSION=1.0
+VERSION=1.1
 
 pima_path = os.path.dirname(os.path.realpath(__file__))
 data_dir = os.path.join(pima_path, 'data')
@@ -47,6 +47,7 @@ included_databases = [amr_database_default, inc_database_default]
 plasmid_database_default_fasta = os.path.join(pima_path, 'data/plasmids_and_vectors.fasta')
 kraken_database_default = os.path.join(pima_path, 'data/kraken2')
 reference_dir_default = os.path.join(pima_path, 'data/reference_sequences')
+pima_css = os.path.join(pima_path,'data/pima.css')
 
 
 class Colors:
@@ -108,7 +109,6 @@ def format_kmg(number, decimals = 0) :
             magnitude_unit = magnitude_units[i]
             return(('{:0.' + str(decimals) + 'f}').format(number / magnitude_power) + magnitude_unit)
 
-    
 class Analysis :
 
     def __init__(self, opts = None, unknown_args = None) :
@@ -1313,7 +1313,6 @@ class Analysis :
                 # Make sure that the positions in the BED file fall within the chromosomes provided in the reference sequence
                 for mutation_region in range(self.mutation_regions.shape[0]) :
                     mutation_region = self.mutation_regions.iloc[mutation_region, :]
-                    print(mutation_region[0])
                     if not (mutation_region[0] in self.reference) :
                         self.errors += [' '.join(['Mutation region',
                                                   ' '.join(mutation_region.astype(str)),
@@ -3305,27 +3304,24 @@ class Analysis :
         os.mkdir(self.report_dir)
 
         self.report_prefix = os.path.join(self.report_dir, 'report')
-        self.report_tex = self.report_prefix + '.tex'
+        self.report_md = self.report_prefix + '.md'
+
+        self.markdown_report = PimaReport(self)
+        self.markdown_report.make_report()
+
         self.report_pdf = self.report_prefix + '.pdf'
+        self.validate_file_and_size_or_error(self.report_md, 'Report MD', 'cannot be found', 'is empty')
         
-        self.latex_report = PimaReport(self)
-        self.latex_report.make_report()
-
-        self.validate_file_and_size_or_error(self.report_tex, 'Report TEX', 'cannot be found', 'is empty')
-
-        # See if we are using a local bundle.  
-        bundle_arg = ''
-        if not (self.bundle is None) :
-            bundle_arg = '--bundle ' + self.bundle
-        
-        tectonic_stdout, tectonic_stderr = self.std_files(os.path.join(self.report_dir, 'tectonic'))
-        command = ' '.join(['tectonic',
-                            bundle_arg,
-                            self.report_tex,
+        tectonic_stdout, tectonic_stderr = self.std_files(os.path.join(self.report_dir, 'markdown2pdf'))
+        command = ' '.join(['pandoc -f gfm',
+                            self.report_md,
+                            '-o',
+                            self.report_pdf,
+                            '--pdf-engine=weasyprint',
+                            '--css ' + pima_css,
                            '1>' + tectonic_stdout, '2>' + tectonic_stderr])
         self.print_and_run(command)
-
-        self.validate_file_and_size_or_error(self.report_pdf, 'Report TEX', 'cannot be found', 'is empty')
+        self.validate_file_and_size_or_error(self.report_pdf, 'Report PDF', 'cannot be found', 'is empty')
 
         
     def clean_up(self) :
