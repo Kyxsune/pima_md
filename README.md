@@ -1,4 +1,4 @@
-# PIMA: Plasmid, Integrations, Mutations, and Antibiotic resistance annotation pipeline
+# PIMA: Plasmid, Integrations, Mutations, and Antibiotic resistance annotation pipeline [MARKDOWN ENABLED]
 
   * [PIMA: Plasmid, Integrations, Mutations, and Antibiotic resistance annotation pipeline](#pima-plasmid-integrations-mutations-and-antibiotic-resistance-annotation-pipeline)
    * [Installation](#installation)
