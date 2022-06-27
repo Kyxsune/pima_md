@@ -2071,7 +2071,7 @@ class Analysis :
         kraken_stdout, kraken_stderr = self.std_files(os.path.join(fastq_dir, 'kraken'))
         DockerPathKraken = os.path.join('/home/DockerDir/Data/Temp_Data/kraken2')
 
-        if not os.path.isdir(kraken_database_default) and self.validate_file_and_size(DockerPathKraken):
+        if not self.validate_file_and_size(kraken_database_default) and self.validate_file_and_size(DockerPathKraken):
             self.kraken_database = DockerPathKraken
 
         fastq_arg = fastq
@@ -3065,7 +3065,7 @@ class Analysis :
         self.print_and_log('Calling plasmids', self.main_process_verbosity, self.main_process_color)
 
         DockerPathPlasmid = os.path.join('/home/DockerDir/Data/Temp_Data/plasmids_and_vectors.fasta')
-        if not self.validate_file_and_size(plasmid_database) and self.validate_file_and_size(DockerPathPlasmid):
+        if not self.validate_file_and_size(self.plasmid_database) and self.validate_file_and_size(DockerPathPlasmid):
             self.plasmid_database = DockerPathPlasmid
 
         # Make a directory for plasmid stuff
