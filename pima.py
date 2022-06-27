@@ -1421,9 +1421,9 @@ class Analysis :
         
         if self.bundle :
             if not os.path.isdir(self.bundle) :
-                self.errors += ['Can\'t find Tectonic bundle ' + self.bundle]
+                self.errors += ['Can\'t find pandoc bundle ' + self.bundle]
         
-        self.validate_utility('tectonic', 'tectonic is not on the PATH (required for reporting).')
+        self.validate_utility('pandoc', 'pandoc is not on the PATH (required for reporting).')
         
         self.analysis += ['make_report']
         

@@ -343,7 +343,6 @@ dependencies:
     - pydyf==0.2.0
     - pygments==2.11.2
     - pyphen==0.12.0
-    - quast==5.0.2
     - shellescape==3.8.1
     - si-prefix==1.2.2
     - simplejson==3.17.6
