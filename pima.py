@@ -517,14 +517,18 @@ class Analysis :
         self.print_and_log('Downloading missing databases', self.main_process_verbosity, self.main_process_color)
 
         database_fasta = plasmid_database_default_fasta
-        if not self.validate_file_and_size(database_fasta) :
+        if not self.validate_file_and_size(database_fasta) and self.validate_file_and_size('/data/Temp_Data/plasmids_and_vectors.fasta'):
+            self.plasmid_database = '/data/Temp_Data/plasmids_and_vectors.fasta'
+        elif not self.validate_file_and_size(database_fasta) and not self.validate_file_and_size('/data/Temp_Data/plasmids_and_vectors.fasta'):
             self.print_and_log('Downloading plasmid database', self.sub_process_verbosity, self.sub_process_color)
             command = ' '.join(['wget',
                                 '-O', database_fasta,
                                 'http://pima.appliedbinf.com/data/plasmids_and_vectors.fasta'])
             self.print_and_run(command)
 
-        if not os.path.isdir(kraken_database_default) :
+        if not os.path.isdir(kraken_database_default) and self.validate_file_and_size('/data/Temp_Data/kraken2'):
+            self.kraken_database = '/data/Temp_Data/kraken2'
+        elif not os.path.isdir(kraken_database_default) and not self.validate_file_and_size('/data/Temp_Data/kraken2'):
             self.print_and_log('Downloading and building kraken2 database (may take some time)', self.sub_process_verbosity, self.sub_process_color)
             kraken_stdout, kraken_stderr = self.std_files(kraken_database_default)
             command = ' '.join(['kraken2-build',
