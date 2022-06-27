@@ -2071,7 +2071,8 @@ class Analysis :
         kraken_stdout, kraken_stderr = self.std_files(os.path.join(fastq_dir, 'kraken'))
         DockerPathKraken = os.path.join('/home/DockerDir/Data/Temp_Data/kraken2')
 
-        if not self.validate_file_and_size(kraken_database_default) and self.validate_file_and_size(DockerPathKraken):
+        if not os.path.isdir(self.kraken_database) and self.validate_file_and_size(DockerPathKraken):
+            'print Using Docker'
             self.kraken_database = DockerPathKraken
 
         fastq_arg = fastq
