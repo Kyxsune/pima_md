@@ -206,7 +206,7 @@ class PimaReport:
         for read_type, kraken_fracs in self.analysis.kraken_fracs.iteritems():
 
             self.doc.new_line(read_type + ' classifications')
-
+            self.doc.new_line()
             Table_List = [
                 "Percent of Reads",
                 "Reads",
