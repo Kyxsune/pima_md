@@ -40,7 +40,7 @@ Developers and maintainers, Testers: [Andrew Conley](https://github.com/abconley
 
 # Installation
 ## Method 1. (Preferred) Install using docker
-A docker image of this pipeline, prebuilt with the dependencies, is available at https://github.com/appliedbinf/pima-docker with steps detailing the installation and running the pipeline. This is the easiest way to load and run the pipeline.  
+A docker image of this pipeline, prebuilt with the dependencies, is available at https://hub.docker.com/r/appliedbioinformaticslab/pimadocker2 with steps detailing the installation and running the pipeline. This is the easiest way to load and run the pipeline.  
   
 All the configurations have been performed here for the user and is a lot easier to setup than installing each dependency.
   
