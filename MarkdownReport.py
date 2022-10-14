@@ -455,7 +455,7 @@ class PimaReport:
         plasmids = plasmids.copy()
 
         self.doc.new_line()
-        self.doc.new_header(level=2,text=self.analysis.plasmid_title)
+        self.doc.new_header(level=2,title=self.analysis.plasmid_title)
 
         if (plasmids.shape[0] == 0):
             self.doc.new_line('None')
