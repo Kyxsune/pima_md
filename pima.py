@@ -1829,7 +1829,7 @@ class Analysis :
              pass_dir = guppy_dir
         else :
              pass_dir = os.path.join(guppy_dir, 'pass')
-       	command = ' '.join(['cat', pass_dir + '/*.fastq >', ont_raw_fastq])
+        command = ' '.join(['cat', pass_dir + '/*.fastq >', ont_raw_fastq])
         self.print_and_run(command)
 
         # Make sure the merged FASTQ file exists and has size > 0
@@ -3108,7 +3108,7 @@ class Analysis :
         self.print_and_log('Converting the SAM file to a PSL file', self.sub_process_verbosity, self.sub_process_color)
         plasmid_psl = os.path.join(self.plasmid_dir, 'plasmid_hits.psl')
         sam2psl_stdout, sam2psl_stderr = self.std_files(os.path.join(self.plasmid_dir, 'sam2psl'))
-        path2sam2psl = ''.join([pima_path,'sam2psl.py'])
+        path2sam2psl = ''.join([pima_path,'/','sam2psl.py'])
         command = ' '.join([path2sam2psl,
                             '-i', plasmid_sam,
                             '-o', plasmid_psl,
@@ -3126,7 +3126,7 @@ class Analysis :
         
         self.plasmid_tsv = os.path.join(self.pchunks_dir, 'plasmids.tsv')
         stdout_file, stderr_file = [os.path.join(self.plasmid_dir, 'pChunks.' + i) for i in ['stdout', 'stderr']]
-        path2pChunks = ''.join([pima_path,'pChunks.R'])
+        path2pChunks = ''.join([pima_path,'/','pChunks.R'])
         command = ' '.join([path2pChunks, '--plasmid-psl', plasmid_psl,
                             '--output', self.pchunks_dir,
                             '--no-amr', '--no-inc',
