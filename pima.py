@@ -3127,7 +3127,7 @@ class Analysis :
         self.plasmid_tsv = os.path.join(self.pchunks_dir, 'plasmids.tsv')
         stdout_file, stderr_file = [os.path.join(self.plasmid_dir, 'pChunks.' + i) for i in ['stdout', 'stderr']]
         path2pChunks = ''.join([pima_path,'/','pChunks.R'])
-        command = ' '.join([path2pChunks, '--plasmid-psl', plasmid_psl,
+        command = ' '.join(['pChunks.R', '--plasmid-psl', plasmid_psl,
                             '--output', self.pchunks_dir,
                             '--no-amr', '--no-inc',
                             '--plasmid-database', self.plasmid_database,
