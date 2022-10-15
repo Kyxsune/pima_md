@@ -1,4 +1,4 @@
-name: pima2
+name: pima
 channels:
   - bioconda
   - conda-forge
