@@ -3127,14 +3127,14 @@ class Analysis :
         self.plasmid_tsv = os.path.join(self.pchunks_dir, 'plasmids.tsv')
         stdout_file, stderr_file = [os.path.join(self.plasmid_dir, 'pChunks.' + i) for i in ['stdout', 'stderr']]
         path2pChunks = ''.join([pima_path,'/','pChunks.R'])
-        command = ' '.join(['pChunks.R', '--plasmid-psl', plasmid_psl,
+        command = ' '.join([path2pChunks, '--plasmid-psl', plasmid_psl,
                             '--output', self.pchunks_dir,
                             '--no-amr', '--no-inc',
                             '--plasmid-database', self.plasmid_database,
                             '--threads', str(self.threads),
                             '1>' + stdout_file, '2>' + stderr_file])
         self.print_and_run(command)
-        self.validate_file_and_size_or_error(self.plasmid_tsv, 'Plasmid output table', 'cannot be found', 'is empty')
+        #self.validate_file_and_size_or_error(self.plasmid_tsv, 'Plasmid output table', 'cannot be found', 'is empty')
         
         # The final file is in pChunks
         self.plasmid_tsv = os.path.join(self.pchunks_dir, 'plasmids.tsv')
