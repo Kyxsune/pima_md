@@ -3134,10 +3134,10 @@ class Analysis :
                             '--threads', str(self.threads),
                             '1>' + stdout_file, '2>' + stderr_file])
         self.print_and_run(command)
-        #self.validate_file_and_size_or_error(self.plasmid_tsv, 'Plasmid output table', 'cannot be found', 'is empty')
+        self.plasmid_tsv = os.readlink(os.path.join(self.pchunks_dir, 'plasmids.tsv'))
+        self.validate_file_and_size_or_error(self.plasmid_tsv, 'Plasmid output table', 'cannot be found', 'is empty')
         
         # The final file is in pChunks
-        self.plasmid_tsv = os.path.join(self.pchunks_dir, 'plasmids.tsv')
         new_plasmid_tsv = os.path.join(self.plasmid_dir, 'plasmids.tsv')
         command = ' '.join(['cp', self.plasmid_tsv, new_plasmid_tsv])
         self.print_and_run(command)
