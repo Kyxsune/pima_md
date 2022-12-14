@@ -1,4 +1,4 @@
-name: pima
+name: pima_test
 channels:
   - bioconda
   - conda-forge
@@ -29,10 +29,10 @@ dependencies:
   - bwidget=1.9.14=ha770c72_1
   - bzip2=1.0.8=h7f98852_4
   - c-ares=1.18.1=h7f98852_0
-  - ca-certificates=2022.9.24=ha878542_0
+  - ca-certificates=2022.10.11=h06a4308_0
   - cachetools=4.2.4=pyhd8ed1ab_0
   - cairo=1.16.0=h6cf1ce9_1008
-  - certifi=2022.9.24=pyhd8ed1ab_0
+  - certifi=2022.9.24=py38h06a4308_0
   - cffi=1.15.0=py38h3931269_0
   - charset-normalizer=2.0.8=pyhd8ed1ab_0
   - circos=0.69.8=hdfd78af_1
@@ -158,12 +158,12 @@ dependencies:
   - ont-fast5-api=4.0.0=pyhdfd78af_0
   - openjdk=11.0.1=h600c080_1018
   - openjpeg=2.4.0=hb52868f_1
-  - openssl=1.1.1o=h166bdaf_0
+  - openssl=1.1.1s=h7f8727e_0
   - opt_einsum=3.3.0=pyhd8ed1ab_1
   - ordered-set=4.0.2=py_0
   - packaging=21.3=pyhd8ed1ab_0
   - pandas=1.3.4=py38h43a58ef_1
-  - pandoc=2.18=ha770c72_0
+  - pandoc=2.12=h06a4308_1
   - pango=1.48.10=h54213e6_2
   - parallel=20160622=1
   - parasail-python=1.2.4=py38h8e3bb3f_1
@@ -365,4 +365,4 @@ dependencies:
     - webcolors==1.11.1
     - webencodings==0.5.1
     - zopfli==0.2.1
-prefix: /home/ubuntu/miniconda3/envs/pima2
+prefix: /home/zenko/anaconda3/envs/pima_test
