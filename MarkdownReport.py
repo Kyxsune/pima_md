@@ -263,6 +263,8 @@ class PimaReport:
             image_png = alignments[contig]
             self.doc.new_line()
             self.doc.new_header(level=3,title=contig_title)
+            self.doc.new_line()
+            self.doc.new_header(level=4,title=self.analysis.assembly_coverage)
             self.doc.new_line(
                 self.doc.new_inline_image(
                     text='contig_title',
